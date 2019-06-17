@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         md= MediaPlayer.create(this,R.raw.sorry);
         songlength=md.getDuration();
         sb.setMax(songlength);
-         Toast.m akeText(this, "duration:"+songlength, Toast.LENGTH_SHORT).show();
+         Toast.makeText(this, "duration:"+songlength, Toast.LENGTH_SHORT).show();
      }
     md.start();
         CountDownTimer cd=new CountDownTimer(100000000,1000) {
@@ -83,22 +83,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void plylistbtn(View view) {
-        Intent intent=new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("*/*");
-        Intent ob= Intent.createChooser(intent,"choose audio");
-        startActivityForResult(ob,1);
+        Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("audio/*");
+       // Intent ob= Intent.createChooser(intent,"choose audio");
+        startActivityForResult(intent,1);
     }
     @Override
     public void onActivityResult(int requestcode,int resultcode,Intent data){
 
     if(resultcode==RESULT_OK){
-         
+        Uri uri=data.getData();
+        new MediaPlayer();
+        md= MediaPlayer.create(getBaseContext(),uri);
+        songlength=md.getDuration();
+        sb.setMax(songlength);
          md.start();
     }
 
     }
 
-
-
-
+    @Override
+    protected void onStop() {
+        md.pause();
+        super.onStop();
+    }
 }
